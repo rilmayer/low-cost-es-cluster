@@ -1,0 +1,27 @@
+
+apiVersion: elasticsearch.k8s.elastic.co/v1
+kind: Elasticsearch
+metadata:
+  name: escluster
+spec:
+  version: 7.8.0
+  nodeSets:
+  - name: default
+    count: 1
+    config:
+      node.master: true
+      node.data: true
+      node.ingest: true
+      node.store.allow_mmap: false
+    podTemplate:
+      spec:
+        containers:
+          - name: elasticsearch
+            env:
+              - name: ES_JAVA_OPTS
+                value: "-Xms512m -Xmx512m"
+            resources:
+              requests:
+                cpu: "600m"
+                memory: "800Mi"
+
