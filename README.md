@@ -1,4 +1,5 @@
 # Low cost Elasticsearch cluster on GKE with ECK
+About 25$/month.
 
 ## GCP settings
 ### Set your GCP account
@@ -36,6 +37,8 @@ terraform init
 ```
 
 ### Apply terraform
+GKE cluster will be created at `us-central1-a` region, because it is lower cost than other refgions as of June 2020.
+
 ```sh
 terraform plan -var "project=${GCP_PROJECT_ID}"
 terraform apply -var "project=${GCP_PROJECT_ID}"
@@ -53,7 +56,7 @@ If `spec:nodeSets:count:` is `1` in `elasticsearch.yaml`, it's single node struc
 ### Get kubernetes credential
 ```sh
 gcloud container clusters get-credentials es-cluster \
-  --zone asia-northeast1-a
+  --zone us-central1-a
 ```
 
 ### Installing the Elasticsearch Operator
@@ -67,7 +70,7 @@ kubectl -n elastic-system get all
 # Remove master taint (It's actually not good, but it enables to use all nodes)
 # kubectl taint nodes --all node-role.kubernetes.io/master-
 
-cd manifests
+cd [ROOT DIR]/manifests
 kubectl apply -f elasticsearch.yaml
 ```
 
@@ -79,7 +82,7 @@ kubectl get elasticsearch
 # Access to Elasticsearch
 kubectl port-forward service/escluster-es-http 9200
 
-# Request (another shell)
+# Request (From another shell)
 PASSWORD=$(kubectl get secret escluster-es-elastic-user -o go-template='{{.data.elastic | base64decode}}')
 curl -u "elastic:$PASSWORD" -k "https://localhost:9200"
 ```
@@ -101,4 +104,9 @@ kubectl get secret escluster-es-elastic-user -o=jsonpath='{.data.elastic}' | bas
 kubectl port-forward service/kibana-kb-http 5601
 ```
 
-Access to `https://localhost:5601` with ID: `elastic`
+Access to `https://localhost:5601` with ID `elastic`
+
+## Monitoring
+Check `https://localhost:5601/app/monitoring`
+
+

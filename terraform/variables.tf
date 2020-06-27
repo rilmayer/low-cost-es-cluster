@@ -1,11 +1,13 @@
 variable "project" {}
 
+# low cost region
 variable "region" {
-  default = "asia-northeast1"
+  default = "us-central1"
 }
 
+# low cost location
 variable "location" {
-  default = "asia-northeast1-a"
+  default = "us-central1-a"
 }
 
 variable "cluster_name" {
@@ -16,18 +18,25 @@ variable "network" {
   default = "default"
 }
 
+# primary_nodes settings
 variable "primary_node_count" {
   default = "1"
-}
-
-variable "primary_preemptible_nodes" {
-  default = "2"
 }
 
 variable "machine_type" {
   default = "e2-small"
 }
 
+
+# primary_preemptible_nodes settings
+variable "primary_preemptible_nodes" {
+  default = "3"
+}
+
+variable "machine_type_preemptible" {
+  default = "e2-medium"
+}
+
 variable "disk_size" {
-  default = "20"
+  default = "15"
 }
