@@ -40,3 +40,6 @@ variable "machine_type_preemptible" {
 variable "disk_size" {
   default = "15"
 }
+
+data "google_compute_default_service_account" "default" {
+}
