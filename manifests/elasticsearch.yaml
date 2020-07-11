@@ -4,6 +4,13 @@ metadata:
   name: escluster
 spec:
   version: 7.8.0
+  http:
+    service:
+      spec:
+        type: ClusterIP
+    tls:
+      selfSignedCertificate:
+        disabled: true
   nodeSets:
   - name: default
     count: 3

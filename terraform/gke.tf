@@ -61,6 +61,9 @@ resource "google_container_node_pool" "primary_preemptible_nodes" {
     disk_type    = "pd-standard"
     disk_size_gb = var.disk_size
 
+    # Need for connecting firewall configs
+    # service_account = data.google_compute_default_service_account.default.email
+
     oauth_scopes = [
       "https://www.googleapis.com/auth/devstorage.read_only",
       "https://www.googleapis.com/auth/logging.write",
@@ -70,4 +73,22 @@ resource "google_container_node_pool" "primary_preemptible_nodes" {
       "https://www.googleapis.com/auth/trace.append",
     ]
   }
+}
+
+resource "google_compute_firewall" "default" {
+  name    = "http-https-allow"
+  network = var.network
+
+  allow {
+    protocol = "tcp"
+    ports    = ["80", "443"]
+  }
+
+  allow {
+    protocol = "udp"
+    ports    = ["80", "443"]
+  }
+
+  source_ranges = ["0.0.0.0/0"]
+  # source_service_accounts = [data.google_compute_default_service_account.default.email]
 }
